@@ -1,18 +1,24 @@
-import { jwtVerify } from "jose";
+import { verifyToken } from "@/lib/jwt";
 
-export async function isAdmin(token?: string) {
+export function isAdmin(
+  token?: string
+) {
   try {
     if (!token) {
       return false;
     }
 
-    const secret = new TextEncoder().encode(
-      process.env.JWT_SECRET || "alpha-nova-secret"
+    const payload =
+      verifyToken(token);
+
+    if (!payload) {
+      return false;
+    }
+
+    return (
+      payload.role === "ADMIN" ||
+      payload.role === "OWNER"
     );
-
-    const { payload } = await jwtVerify(token, secret);
-
-    return payload.role === "ADMIN";
   } catch {
     return false;
   }
