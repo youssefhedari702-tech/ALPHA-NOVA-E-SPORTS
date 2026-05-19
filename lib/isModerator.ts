@@ -1,4 +1,4 @@
-import { verifyToken } from "@/lib/jwt";
+import { verifyToken } from "./jwt";
 
 export function isModerator(
   token?: string
