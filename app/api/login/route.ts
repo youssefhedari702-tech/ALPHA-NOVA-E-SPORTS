@@ -1,6 +1,5 @@
-import {
-  NextResponse,
-} from "next/server";
+import { NextResponse }
+from "next/server";
 
 import bcrypt
 from "bcryptjs";
@@ -28,12 +27,10 @@ export async function POST(
     ) {
 
       return NextResponse.json(
-
         {
           error:
-            "MISSING FIELDS",
+            "EMAIL AND PASSWORD REQUIRED",
         },
-
         {
           status: 400,
         }
@@ -42,7 +39,6 @@ export async function POST(
 
     const user =
       await prisma.user.findUnique({
-
         where: {
           email,
         },
@@ -51,34 +47,42 @@ export async function POST(
     if (!user) {
 
       return NextResponse.json(
-
         {
           error:
             "USER NOT FOUND",
         },
-
         {
           status: 404,
         }
       );
     }
 
-    const passwordMatch =
-      await bcrypt.compare(
+    if (!user.password) {
 
+      return NextResponse.json(
+        {
+          error:
+            "PASSWORD NOT SET",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const validPassword =
+      await bcrypt.compare(
         password,
         user.password
       );
 
-    if (!passwordMatch) {
+    if (!validPassword) {
 
       return NextResponse.json(
-
         {
           error:
             "INVALID PASSWORD",
         },
-
         {
           status: 401,
         }
@@ -86,35 +90,8 @@ export async function POST(
     }
 
     return NextResponse.json({
-
       success: true,
-
-      user: {
-
-        id:
-          user.id,
-
-        email:
-          user.email,
-
-        fullName:
-          user.fullName,
-
-        freeFireName:
-          user.freeFireName,
-
-        uid:
-          user.uid,
-
-        country:
-          user.country,
-
-        clanName:
-          user.clanName,
-
-        role:
-          user.role,
-      },
+      user,
     });
 
   } catch (error) {
@@ -122,12 +99,10 @@ export async function POST(
     console.log(error);
 
     return NextResponse.json(
-
       {
         error:
           "SERVER ERROR",
       },
-
       {
         status: 500,
       }
