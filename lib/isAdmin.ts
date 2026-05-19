@@ -2,7 +2,9 @@ import { jwtVerify } from "jose";
 
 export async function isAdmin(token?: string) {
   try {
-    if (!token) return false;
+    if (!token) {
+      return false;
+    }
 
     const secret = new TextEncoder().encode(
       process.env.JWT_SECRET || "alpha-nova-secret"
