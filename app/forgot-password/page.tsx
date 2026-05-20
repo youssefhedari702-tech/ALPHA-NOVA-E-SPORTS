@@ -5,24 +5,20 @@ import { supabase } from "@/lib/supabase";
 
 export default function ForgotPasswordPage() {
 
-  const [email, setEmail] =
-    useState("");
-
-  const [message, setMessage] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(false);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleReset() {
 
     try {
 
       setLoading(true);
+      setMessage("");
 
       const { error } =
         await supabase.auth.resetPasswordForEmail(
-          email,
+          email.trim(),
           {
             redirectTo:
               "https://alpha-nova-e-sports-ikgdhmn8f-alphanovaafficial-4944s-projects.vercel.app/reset-password",
@@ -31,14 +27,12 @@ export default function ForgotPasswordPage() {
 
       if (error) {
 
-        setMessage(
-          error.message
-        );
+        setMessage(error.message);
 
       } else {
 
         setMessage(
-          "Reset password email sent."
+          "Check your Gmail inbox."
         );
       }
 
@@ -60,38 +54,35 @@ export default function ForgotPasswordPage() {
 
       <div className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-900 p-8">
 
-        <h1 className="mb-6 text-center text-4xl font-black text-cyan-400">
+        <h1 className="mb-6 text-center text-3xl font-black text-cyan-400">
           Forgot Password
         </h1>
 
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder="Enter your Gmail"
           value={email}
           onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
+            setEmail(e.target.value)
           }
-          className="mb-4 w-full rounded-xl border border-zinc-700 bg-black px-4 py-3 outline-none"
+          className="w-full rounded-xl border border-zinc-700 bg-black px-4 py-3 outline-none"
         />
 
         <button
           onClick={handleReset}
           disabled={loading}
-          className="w-full rounded-xl bg-cyan-500 py-3 font-bold text-black"
+          className="mt-5 w-full rounded-xl bg-cyan-500 py-3 font-black text-black"
         >
           {loading
-            ? "Loading..."
+            ? "Sending..."
             : "Send Reset Link"}
         </button>
 
         {message && (
 
-          <p className="mt-4 text-center text-sm text-zinc-400">
+          <p className="mt-5 text-center text-sm text-zinc-300">
             {message}
           </p>
-
         )}
 
       </div>
