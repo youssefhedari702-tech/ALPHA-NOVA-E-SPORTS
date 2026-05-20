@@ -3,19 +3,19 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function ResetPasswordPage() {
-  const [email, setEmail] = useState("");
+export default function UpdatePasswordPage() {
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  async function handleReset() {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/update-password",
+  async function updatePassword() {
+    const { error } = await supabase.auth.updateUser({
+      password,
     });
 
     if (error) {
       setMessage(error.message);
     } else {
-      setMessage("Password reset email sent.");
+      setMessage("Password updated successfully.");
     }
   }
 
@@ -24,22 +24,22 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
 
         <h1 className="mb-6 text-3xl font-black text-cyan-400">
-          Reset Password
+          New Password
         </h1>
 
         <input
-          type="email"
-          placeholder="Your email"
+          type="password"
+          placeholder="New password"
           className="mb-4 w-full rounded-xl border border-zinc-700 bg-black p-4"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
-          onClick={handleReset}
+          onClick={updatePassword}
           className="w-full rounded-xl bg-cyan-500 py-4 font-bold text-black"
         >
-          Send Reset Link
+          Update Password
         </button>
 
         {message && (
