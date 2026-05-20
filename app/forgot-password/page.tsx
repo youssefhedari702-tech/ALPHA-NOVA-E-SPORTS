@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
           email,
           {
             redirectTo:
-              "https://alpha-nova-e-sports.vercel.app/reset-password",
+              "https://alpha-nova-e-sports-ikgdhmn8f-alphanovaafficial-4944s-projects.vercel.app/reset-password",
           }
         );
 
